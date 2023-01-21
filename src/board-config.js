@@ -1,5 +1,5 @@
 export const BOARD_CONFIG = {
-  numOfMines: 8,
+  numOfMines: 1,
   boardSize: 10,
 };
 

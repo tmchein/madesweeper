@@ -16,18 +16,20 @@ const Tile = ({ status, x, y, updateBoard, mine, board, label }) => {
       return;
     }
 
-    updateBoard({ tileStatus: TILE_STATUSES.REVEALED, label: "", x, y });
-
     const adjacentTiles = nearbyTiles(board, { x, y });
     const mines = adjacentTiles.filter((t) => t.mine);
 
     console.log({ adjacentTiles, mines });
-
     if (mines.length === 0) {
-      // adjacentTiles.forEach((tile) => {
-      //   handleClick(TILE_STATUSES.REVEALED, tile.x, tile.y);
-      //   // updateBoard({ tileStatus: TILE_STATUSES.REVEALED, label: "", x, y });
-      // });
+      adjacentTiles.forEach((tile) => {
+        if (
+          tile.status !== TILE_STATUSES.REVEALED &&
+          tile.status !== TILE_STATUSES.MARKED
+        ) {
+          updateBoard({ tileStatus: TILE_STATUSES.REVEALED, label: "", x, y });
+          handleClick(TILE_STATUSES.REVEALED, tile.x, tile.y);
+        }
+      });
     } else {
       updateBoard({
         tileStatus: TILE_STATUSES.REVEALED,
