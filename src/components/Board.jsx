@@ -28,6 +28,7 @@ const Board = ({ boardSize, numberOfMines }) => {
           return (
             <Tile
               updateBoard={updateBoard}
+              mine={tile.mine}
               key={`position-${tile.x}-${tile.y}}`}
               x={tile.x}
               y={tile.y}

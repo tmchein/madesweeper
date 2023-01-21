@@ -2,7 +2,7 @@ import { useState } from "react";
 import { COLORS } from "../board-config";
 import { TILE_STATUSES } from "../utils/createBoard";
 
-const Tile = ({ status, x, y, updateBoard }) => {
+const Tile = ({ status, x, y, updateBoard, mine }) => {
   // Create an useState for having each tile managing its own state
   // can have marked, revealed, mine or hidden status.
 
@@ -12,12 +12,23 @@ const Tile = ({ status, x, y, updateBoard }) => {
   const [tileStatus, setTileStatus] = useState(status);
 
   function handleClick(status, x, y) {
+    if (mine) {
+      setTileStatus(TILE_STATUSES.MINE);
+      updateBoard({ tileStatus: TILE_STATUSES.MINE, x, y });
+      return;
+    }
     setTileStatus(TILE_STATUSES.REVEALED);
     updateBoard({ tileStatus: TILE_STATUSES.REVEALED, x, y });
   }
 
   function handleRightClick(e) {
     e.preventDefault();
+    if (
+      tileStatus === TILE_STATUSES.REVEALED ||
+      tileStatus === TILE_STATUSES.MINE
+    ) {
+      return;
+    }
     setTileStatus(TILE_STATUSES.MARKED);
     updateBoard({ tileStatus: TILE_STATUSES.MARKED, x, y });
   }

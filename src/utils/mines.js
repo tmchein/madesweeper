@@ -13,7 +13,7 @@ export function getMinesPositions(boardSize, numberOfMines) {
   return positions;
 }
 
-function positionMatch(a, b) {
+export function positionMatch(a, b) {
   return a.x === b.x && a.y === b.y;
 }
 
