@@ -1,36 +1,53 @@
-import { useState } from "react";
 import { COLORS } from "../board-config";
-import { TILE_STATUSES } from "../utils/createBoard";
+import { nearbyTiles, TILE_STATUSES } from "../utils/createBoard";
 
-const Tile = ({ status, x, y, updateBoard, mine }) => {
+const Tile = ({ status, x, y, updateBoard, mine, board, label }) => {
   // Create an useState for having each tile managing its own state
   // can have marked, revealed, mine or hidden status.
 
   // when clicking send the state to the board, so it will mutate the board
   // board[x][y].status
 
-  const [tileStatus, setTileStatus] = useState(status);
-
   function handleClick(status, x, y) {
+    if (status === TILE_STATUSES.MARKED) return;
+
     if (mine) {
-      setTileStatus(TILE_STATUSES.MINE);
-      updateBoard({ tileStatus: TILE_STATUSES.MINE, x, y });
+      updateBoard({ tileStatus: TILE_STATUSES.MINE, label: "", x, y });
       return;
     }
-    setTileStatus(TILE_STATUSES.REVEALED);
-    updateBoard({ tileStatus: TILE_STATUSES.REVEALED, x, y });
+
+    updateBoard({ tileStatus: TILE_STATUSES.REVEALED, label: "", x, y });
+
+    const adjacentTiles = nearbyTiles(board, { x, y });
+    const mines = adjacentTiles.filter((t) => t.mine);
+
+    console.log({ adjacentTiles, mines });
+
+    if (mines.length === 0) {
+      // adjacentTiles.forEach((tile) => {
+      //   handleClick(TILE_STATUSES.REVEALED, tile.x, tile.y);
+      //   // updateBoard({ tileStatus: TILE_STATUSES.REVEALED, label: "", x, y });
+      // });
+    } else {
+      updateBoard({
+        tileStatus: TILE_STATUSES.REVEALED,
+        label: mines.length,
+        x,
+        y,
+      });
+    }
   }
 
   function handleRightClick(e) {
     e.preventDefault();
-    if (
-      tileStatus === TILE_STATUSES.REVEALED ||
-      tileStatus === TILE_STATUSES.MINE
-    ) {
+    if (status === TILE_STATUSES.REVEALED || status === TILE_STATUSES.MINE) {
       return;
     }
-    setTileStatus(TILE_STATUSES.MARKED);
-    updateBoard({ tileStatus: TILE_STATUSES.MARKED, x, y });
+    if (status === TILE_STATUSES.MARKED) {
+      updateBoard({ tileStatus: TILE_STATUSES.HIDDEN, label: "", x, y });
+      return;
+    }
+    updateBoard({ tileStatus: TILE_STATUSES.MARKED, label: "🏳️", x, y });
   }
 
   return (
@@ -38,9 +55,9 @@ const Tile = ({ status, x, y, updateBoard, mine }) => {
       onClick={() => handleClick(status, x, y)}
       onContextMenu={handleRightClick}
       className={`font-bold text-center w-8 h-8 px-2 
-      border-b-4 border-x-0 rounded-md bg-white ${COLORS[tileStatus]}`}
+      border-b-4 border-x-0 rounded-md bg-white ${COLORS[status]}`}
     >
-      {tileStatus.slice(0, 1)}
+      {label}
     </button>
   );
 };

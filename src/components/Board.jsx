@@ -7,10 +7,13 @@ const Board = ({ boardSize, numberOfMines }) => {
     createBoard(boardSize, numberOfMines)
   );
 
-  const updateBoard = ({ tileStatus, x, y }) => {
+  console.log({ board });
+
+  const updateBoard = ({ tileStatus, label, x, y }) => {
     setBoard((previousBoard) => {
       const newBoard = [...previousBoard];
       newBoard[x][y].status = tileStatus;
+      newBoard[x][y].label = label;
       return newBoard;
     });
   };
@@ -28,10 +31,12 @@ const Board = ({ boardSize, numberOfMines }) => {
           return (
             <Tile
               updateBoard={updateBoard}
+              board={board}
               mine={tile.mine}
               key={`position-${tile.x}-${tile.y}}`}
               x={tile.x}
               y={tile.y}
+              label={tile.label}
               status={tile.status}
             />
           );

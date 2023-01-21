@@ -1,6 +1,6 @@
 export const BOARD_CONFIG = {
-  numOfMines: 1,
-  boardSize: 2,
+  numOfMines: 8,
+  boardSize: 10,
 };
 
 export const COLORS = {
