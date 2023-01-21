@@ -13,13 +13,13 @@ const Tile = ({ status, x, y, updateBoard }) => {
 
   function handleClick(status, x, y) {
     setTileStatus(TILE_STATUSES.REVEALED);
-    updateBoard({ tileStatus, x, y });
+    updateBoard({ tileStatus: TILE_STATUSES.REVEALED, x, y });
   }
 
   function handleRightClick(e) {
     e.preventDefault();
     setTileStatus(TILE_STATUSES.MARKED);
-    updateBoard({ tileStatus, x, y });
+    updateBoard({ tileStatus: TILE_STATUSES.MARKED, x, y });
   }
 
   return (

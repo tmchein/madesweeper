@@ -7,11 +7,12 @@ const Board = ({ boardSize, numberOfMines }) => {
     createBoard(boardSize, numberOfMines)
   );
 
-  console.log(board.flat());
-
   const updateBoard = ({ tileStatus, x, y }) => {
-    console.log({ currentBoard: board.flat(), x, y, tileStatus });
-    // TODO: Update the board with the new status
+    setBoard((previousBoard) => {
+      const newBoard = [...previousBoard];
+      newBoard[x][y].status = tileStatus;
+      return newBoard;
+    });
   };
 
   return (
